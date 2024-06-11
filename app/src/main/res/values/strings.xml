@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="add_task">Добавить задачу</string>
+    <string name="empty">Nothing to show</string>
+    <string name="no_data">Список пусть!</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+</resources>
