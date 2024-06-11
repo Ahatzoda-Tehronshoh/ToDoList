@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="8dp"
-    tools:context=".ui.add.AddFragment">
+    tools:context=".ui.UpdateFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/titleInputLayout"
@@ -48,10 +48,10 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/add_button"
+        android:id="@+id/update_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_task"
+        android:text="@string/update_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

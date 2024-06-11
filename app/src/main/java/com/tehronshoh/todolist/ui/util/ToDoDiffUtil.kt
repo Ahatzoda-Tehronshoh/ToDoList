@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.util
+package com.tehronshoh.todolist.ui.util
 
 import androidx.recyclerview.widget.DiffUtil
 import com.tehronshoh.todolist.data.ToDo

@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist
+package com.tehronshoh.todolist.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.databinding.FragmentMainBinding
-import com.tehronshoh.todolist.util.MainViewModelFactory
+import com.tehronshoh.todolist.ui.util.MainViewModelFactory
 
 /**
  * A fragment representing a list of To_Do.
@@ -67,9 +68,8 @@ class MainFragment : Fragment() {
             }
             adapter = toDoAdapter.also {
                 it.onItemClickListener = { todo ->
-                    Toast.makeText(requireContext(), "Tapped ${todo.id} task!", Toast.LENGTH_SHORT)
-                        .show()
-                    // viewModel.onPoemClick(poem)
+                    val action = MainFragmentDirections.actionMainFragmentToUpdateFragment(todo)
+                    findNavController().navigate(action)
                 }
             }
         }

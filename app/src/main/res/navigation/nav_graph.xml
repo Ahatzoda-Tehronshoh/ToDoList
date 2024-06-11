@@ -6,16 +6,28 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.tehronshoh.todolist.MainFragment"
+        android:name="com.tehronshoh.todolist.ui.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_mainFragment_to_addFragment"
             app:destination="@id/addFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_updateFragment"
+            app:destination="@id/updateFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
-        android:name="com.tehronshoh.todolist.AddFragment"
+        android:name="com.tehronshoh.todolist.ui.add.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" />
+    <fragment
+        android:id="@+id/updateFragment"
+        android:name="com.tehronshoh.todolist.ui.UpdateFragment"
+        android:label="fragment_update"
+        tools:layout="@layout/fragment_update" >
+        <argument
+            android:name="todo"
+            app:argType="com.tehronshoh.todolist.data.ToDo" />
+    </fragment>
 </navigation>

@@ -1,10 +1,11 @@
-package com.tehronshoh.todolist
+package com.tehronshoh.todolist.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
