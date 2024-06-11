@@ -1,5 +1,6 @@
 package com.tehronshoh.todolist.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -67,9 +68,15 @@ class MainFragment : Fragment() {
                 else -> GridLayoutManager(context, columnCount)
             }
             adapter = toDoAdapter.also {
-                it.onItemClickListener = { todo ->
-                    val action = MainFragmentDirections.actionMainFragmentToUpdateFragment(todo)
+                it.onItemClickListener = { toDo ->
+                    val action = MainFragmentDirections.actionMainFragmentToUpdateFragment(toDo)
                     findNavController().navigate(action)
+                }
+                it.onDeleteListener = { toDo ->
+                    showDeleteConfirmationDialog {
+                        mainViewModel.deleteToDo(toDo)
+                        Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -84,6 +91,18 @@ class MainFragment : Fragment() {
                 toDoAdapter.submitList(toDoList)
             }
         }
+    }
+
+    private fun showDeleteConfirmationDialog(onPositiveClick: () -> Unit) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Подтверждение удаления")
+            .setMessage("Вы действительно хотите удалить эту задачу?")
+            .setPositiveButton("Да") { _, _ ->
+                onPositiveClick()
+            }
+            .setNegativeButton("Нет") { _, _ -> }
+            .create()
+        dialog.show()
     }
 
     override fun onDestroyView() {

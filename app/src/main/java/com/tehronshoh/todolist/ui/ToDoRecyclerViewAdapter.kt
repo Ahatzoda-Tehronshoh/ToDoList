@@ -14,6 +14,7 @@ class ToDoRecyclerViewAdapter: ListAdapter<ToDo, ToDoRecyclerViewAdapter.ToDoVie
 ) {
 
     var onItemClickListener: ((ToDo) -> (Unit))? = null
+    var onDeleteListener: ((ToDo) -> (Unit))? = null
 
     inner class ToDoViewHolder(private val binding: TodoItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -27,6 +28,10 @@ class ToDoRecyclerViewAdapter: ListAdapter<ToDo, ToDoRecyclerViewAdapter.ToDoVie
             binding.root.setOnClickListener {
                 if (bindingAdapterPosition >= 0)
                     onItemClickListener?.invoke(getItem(bindingAdapterPosition))
+            }
+            binding.deleteButton.setOnClickListener {
+                if(bindingAdapterPosition >= 0)
+                    onDeleteListener?.invoke(getItem(bindingAdapterPosition))
             }
         }
     }
