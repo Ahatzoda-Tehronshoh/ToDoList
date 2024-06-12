@@ -85,10 +85,16 @@ class MainFragment : Fragment() {
                     findNavController().navigate(action)
                 }
                 it.onDeleteListener = { toDo ->
-                    showDeleteConfirmationDialog {
-                        mainViewModel.deleteToDo(toDo)
-                        Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT).show()
-                    }
+                    if (mainViewModel.loggedInUser.value?.email == toDo.creatorEmail)
+                        showDeleteConfirmationDialog {
+                            mainViewModel.deleteToDo(toDo)
+                            Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT).show()
+                        }
+                    else
+                        Toast.makeText(
+                            requireContext(),
+                            context.getString(R.string.you_can_not_edit), Toast.LENGTH_SHORT
+                        ).show()
                 }
             }
         }

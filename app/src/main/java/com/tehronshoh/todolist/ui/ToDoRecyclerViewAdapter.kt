@@ -26,7 +26,7 @@ class ToDoRecyclerViewAdapter : ListAdapter<ToDo, ToDoRecyclerViewAdapter.ToDoVi
             binding.description.text = todo.description
             binding.creator.text = todo.creatorEmail
             binding.assignee.text = todo.assigneeEmail
-            binding.due.text = todo.dueDate.toString()
+            binding.due.text = todo.dueDate
 
             setStatus(todo)
         }
@@ -56,6 +56,15 @@ class ToDoRecyclerViewAdapter : ListAdapter<ToDo, ToDoRecyclerViewAdapter.ToDoVi
                     binding.statusCard.setCardBackgroundColor(
                         binding.root.context.getColorStateList(
                             R.color.done_status_color
+                        )
+                    )
+                }
+
+                ToDoStatus.CLOSED -> {
+                    binding.statusText.text = binding.root.context.getString(R.string.closed)
+                    binding.statusCard.setCardBackgroundColor(
+                        binding.root.context.getColorStateList(
+                            R.color.closed_status_color
                         )
                     )
                 }

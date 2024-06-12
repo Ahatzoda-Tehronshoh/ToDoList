@@ -47,6 +47,28 @@ class UpdateFragment : Fragment() {
         setAssigneeSpinner()
         setArgumentsToViews()
         updateButtonClick()
+
+        setViewsEditable()
+    }
+
+    private fun setViewsEditable() {
+        val taskIsNotClosed = ToDoStatus.valueOf(args.todo.status) != ToDoStatus.CLOSED
+        val areUserCreator = mainViewModel.loggedInUser.value?.email == args.todo.creatorEmail
+        val areUserAssignee =
+            mainViewModel.loggedInUser.value?.email == args.todo.assigneeEmail && taskIsNotClosed
+
+        binding.apply {
+            allowText.text =
+                if (!areUserCreator) requireContext().getString(R.string.you_can_not_edit) else ""
+            titleInputLayout.isEnabled = areUserCreator
+            descriptionInputLayout.isEnabled = areUserCreator
+            assigneeSpinner.isEnabled = areUserCreator
+            dueDateInputLayout.isEnabled = areUserCreator
+
+            statusSpinner.isEnabled = areUserCreator || areUserAssignee
+            updateButton.visibility =
+                if (areUserCreator || areUserAssignee) View.VISIBLE else View.GONE
+        }
     }
 
     private fun setArgumentsToViews() {
@@ -82,6 +104,7 @@ class UpdateFragment : Fragment() {
             getString(R.string.waiting) -> ToDoStatus.WAITING.toString()
             getString(R.string.in_process) -> ToDoStatus.IN_PROCESS.toString()
             getString(R.string.done) -> ToDoStatus.DONE.toString()
+            getString(R.string.closed) -> ToDoStatus.CLOSED.toString()
             else -> "WAITING"
         }
     }
@@ -91,6 +114,7 @@ class UpdateFragment : Fragment() {
             ToDoStatus.WAITING -> 0
             ToDoStatus.IN_PROCESS -> 1
             ToDoStatus.DONE -> 2
+            ToDoStatus.CLOSED -> 3
         }
     }
 
@@ -126,22 +150,29 @@ class UpdateFragment : Fragment() {
                 },
                 year, month, day
             )
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis // Только будущие даты
+            datePickerDialog.datePicker.minDate =
+                Calendar.getInstance().timeInMillis // Только будущие даты
             datePickerDialog.show()
         }
     }
 
     private fun setStatusSpinner() {
-        val statuses = arrayOf(
+        val statuses = mutableListOf(
             getString(R.string.waiting),
             getString(R.string.in_process),
             getString(R.string.done)
         )
 
+        if (mainViewModel.loggedInUser.value?.email == args.todo.creatorEmail || ToDoStatus.valueOf(
+                args.todo.status
+            ) == ToDoStatus.CLOSED
+        )
+            statuses.add(getString(R.string.closed))
+
         ArrayAdapter<CharSequence>(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            statuses,
+            statuses.toTypedArray(),
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

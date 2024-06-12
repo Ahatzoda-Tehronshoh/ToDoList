@@ -117,6 +117,16 @@
                 app:layout_constraintStart_toEndOf="@id/assigneeInputLayout"
                 app:layout_constraintTop_toTopOf="@id/assigneeInputLayout" />
 
+            <TextView
+                android:id="@+id/allow_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/due_date_color"
+                android:layout_marginVertical="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/assigneeInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

@@ -86,7 +86,8 @@ class AddFragment : Fragment() {
         val statuses = arrayOf(
             getString(R.string.waiting),
             getString(R.string.in_process),
-            getString(R.string.done)
+            getString(R.string.done),
+            getString(R.string.closed),
         )
 
         ArrayAdapter<CharSequence>(
@@ -124,6 +125,7 @@ class AddFragment : Fragment() {
             getString(R.string.waiting) -> ToDoStatus.WAITING.toString()
             getString(R.string.in_process) -> ToDoStatus.IN_PROCESS.toString()
             getString(R.string.done) -> ToDoStatus.DONE.toString()
+            getString(R.string.closed) -> ToDoStatus.CLOSED.toString()
             else -> "WAITING"
         }
     }
