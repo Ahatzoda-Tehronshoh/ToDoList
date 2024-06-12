@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.tehronshoh.todolist" />
+                  <option name="mobileSdkAppId" value="1:277493684942:android:1249be6c9c2bcaaacb0e9f" />
+                  <option name="projectId" value="todolist-f399b" />
+                  <option name="projectNumber" value="277493684942" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

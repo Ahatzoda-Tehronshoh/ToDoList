@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.authorization.signin
+package com.tehronshoh.todolist.presenter.authorization.signin
 
 sealed class SignInResult {
     object IsLoading: SignInResult()

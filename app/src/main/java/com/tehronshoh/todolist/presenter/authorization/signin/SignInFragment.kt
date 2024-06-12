@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.authorization.signin
+package com.tehronshoh.todolist.presenter.authorization.signin
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,9 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.databinding.FragmentSignInBinding
-import com.tehronshoh.todolist.ui.MainViewModel
-import com.tehronshoh.todolist.ui.util.MainViewModelFactory
-import com.tehronshoh.todolist.ui.util.SignInViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
+import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.SignInViewModelFactory
 
 class SignInFragment : Fragment() {
     private var _binding: FragmentSignInBinding? = null

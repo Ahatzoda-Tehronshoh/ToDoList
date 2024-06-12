@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.authorization.signin
+package com.tehronshoh.todolist.presenter.authorization.signin
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,6 @@ import com.tehronshoh.todolist.data.model.LoggedInUser
 import com.tehronshoh.todolist.data.repository.LoggedInUserRepository
 import com.tehronshoh.todolist.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SignInViewModel(

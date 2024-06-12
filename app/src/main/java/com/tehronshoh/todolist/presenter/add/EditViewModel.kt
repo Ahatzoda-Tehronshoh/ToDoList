@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.add
+package com.tehronshoh.todolist.presenter.add
 
 import androidx.lifecycle.ViewModel
 import com.tehronshoh.todolist.data.repository.UserRepository

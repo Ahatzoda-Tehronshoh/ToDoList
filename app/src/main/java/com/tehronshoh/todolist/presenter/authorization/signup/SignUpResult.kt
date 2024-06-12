@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.authorization.signup
+package com.tehronshoh.todolist.presenter.authorization.signup
 
 sealed class SignUpResult {
     object IsLoading: SignUpResult()

@@ -23,8 +23,7 @@ import kotlinx.parcelize.Parcelize
             childColumns = ["assignee_email"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index("creator_email", "assignee_email", unique = true)])
+    ])
 data class ToDo(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,

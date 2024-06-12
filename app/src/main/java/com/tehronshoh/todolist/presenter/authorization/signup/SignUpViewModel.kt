@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.authorization.signup
+package com.tehronshoh.todolist.presenter.authorization.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

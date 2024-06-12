@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui
+package com.tehronshoh.todolist.presenter
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.databinding.FragmentMainBinding
-import com.tehronshoh.todolist.ui.util.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 
 /**
  * A fragment representing a list of To_Do.

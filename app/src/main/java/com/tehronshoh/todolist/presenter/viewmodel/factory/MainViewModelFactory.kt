@@ -1,8 +1,8 @@
-package com.tehronshoh.todolist.ui.util
+package com.tehronshoh.todolist.presenter.viewmodel.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.tehronshoh.todolist.ui.MainViewModel
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.data.repository.impl.LoggedInUserRepositoryImpl
 import com.tehronshoh.todolist.data.repository.impl.ToDoRepositoryImpl

@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui
+package com.tehronshoh.todolist.presenter.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

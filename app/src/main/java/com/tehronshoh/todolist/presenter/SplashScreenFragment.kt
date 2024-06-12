@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui
+package com.tehronshoh.todolist.presenter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
-import com.tehronshoh.todolist.databinding.FragmentSignInBinding
 import com.tehronshoh.todolist.databinding.SplashScreenFragmentBinding
-import com.tehronshoh.todolist.ui.util.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

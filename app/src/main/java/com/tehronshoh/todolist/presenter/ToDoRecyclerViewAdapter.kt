@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui
+package com.tehronshoh.todolist.presenter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.TodoItemBinding
-import com.tehronshoh.todolist.ui.util.ToDoDiffUtil
+import com.tehronshoh.todolist.presenter.util.ToDoDiffUtil
 
 
 class ToDoRecyclerViewAdapter : ListAdapter<ToDo, ToDoRecyclerViewAdapter.ToDoViewHolder>(

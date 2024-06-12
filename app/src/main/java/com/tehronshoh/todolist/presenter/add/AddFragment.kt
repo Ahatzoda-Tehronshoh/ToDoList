@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.add
+package com.tehronshoh.todolist.presenter.add
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -9,14 +9,15 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.ui.MainViewModel
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.FragmentAddBinding
-import com.tehronshoh.todolist.ui.util.EditViewModelFactory
-import com.tehronshoh.todolist.ui.util.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.EditViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
 import java.util.Calendar
 
 class AddFragment : Fragment() {
@@ -114,6 +115,8 @@ class AddFragment : Fragment() {
                     assigneeEmail = binding.assigneeSpinner.selectedItem.toString()
                 )
                 mainViewModel.createToDo(toDo)
+
+                FirebaseMessaging.getInstance().subscribeToTopic(toDo.id.toString())
                 findNavController().popBackStack()
             } else
                 binding.titleInputLayout.error = "Title is required"

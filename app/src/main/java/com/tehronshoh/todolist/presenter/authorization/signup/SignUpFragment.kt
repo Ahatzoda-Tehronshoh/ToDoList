@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui.authorization.signup
+package com.tehronshoh.todolist.presenter.authorization.signup
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,9 +11,9 @@ import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.data.model.User
 import com.tehronshoh.todolist.databinding.FragmentSignUpBinding
-import com.tehronshoh.todolist.ui.MainViewModel
-import com.tehronshoh.todolist.ui.util.MainViewModelFactory
-import com.tehronshoh.todolist.ui.util.SignUpViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
+import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.SignUpViewModelFactory
 
 
 class SignUpFragment : Fragment() {
@@ -93,6 +93,11 @@ class SignUpFragment : Fragment() {
                 ))
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.progressBar.visibility = View.GONE
     }
 
     override fun onDestroyView() {

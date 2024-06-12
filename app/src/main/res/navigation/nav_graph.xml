@@ -6,7 +6,7 @@
     app:startDestination="@id/splashScreenFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.tehronshoh.todolist.ui.MainFragment"
+        android:name="com.tehronshoh.todolist.presenter.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -23,12 +23,12 @@
     </fragment>
     <fragment
         android:id="@+id/addFragment"
-        android:name="com.tehronshoh.todolist.ui.add.AddFragment"
+        android:name="com.tehronshoh.todolist.presenter.add.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" />
     <fragment
         android:id="@+id/updateFragment"
-        android:name="com.tehronshoh.todolist.ui.UpdateFragment"
+        android:name="com.tehronshoh.todolist.presenter.UpdateFragment"
         android:label="fragment_update"
         tools:layout="@layout/fragment_update" >
         <argument
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.tehronshoh.todolist.ui.SplashScreenFragment"
+        android:name="com.tehronshoh.todolist.presenter.SplashScreenFragment"
         android:label="splash_screen_fragment"
         tools:layout="@layout/splash_screen_fragment" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.tehronshoh.todolist.ui.authorization.signup.SignUpFragment"
+        android:name="com.tehronshoh.todolist.presenter.authorization.signup.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.tehronshoh.todolist.ui.authorization.signin.SignInFragment"
+        android:name="com.tehronshoh.todolist.presenter.authorization.signin.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action

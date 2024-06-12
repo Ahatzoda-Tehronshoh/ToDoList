@@ -1,4 +1,4 @@
-package com.tehronshoh.todolist.ui
+package com.tehronshoh.todolist.presenter
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -10,14 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.FragmentUpdateBinding
-import com.tehronshoh.todolist.ui.add.EditViewModel
-import com.tehronshoh.todolist.ui.util.EditViewModelFactory
-import com.tehronshoh.todolist.ui.util.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.add.EditViewModel
+import com.tehronshoh.todolist.presenter.util.FCMSender
+import com.tehronshoh.todolist.presenter.viewmodel.factory.EditViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 import java.util.Calendar
 
 class UpdateFragment : Fragment() {
@@ -93,10 +96,26 @@ class UpdateFragment : Fragment() {
                     assigneeEmail = binding.assigneeSpinner.selectedItem.toString()
                 )
                 mainViewModel.updateToDo(toDo)
+                sendPushNotification(toDo)
                 findNavController().popBackStack()
             } else
                 binding.titleInputLayout.error = "Title is required"
         }
+    }
+
+    private fun sendPushNotification(toDo: ToDo) {
+        FirebaseMessaging.getInstance().subscribeToTopic(toDo.id.toString())
+
+        FCMSender(
+            "/topics/${toDo.id}",
+            if(mainViewModel.loggedInUser.value?.email == toDo.creatorEmail)
+                toDo.assigneeEmail
+            else
+                toDo.creatorEmail,
+            "Task:${toDo.title} was updated!",
+            requireContext(),
+            requireActivity()
+        ).sendNotifications()
     }
 
     private fun getStatus(text: String): String {

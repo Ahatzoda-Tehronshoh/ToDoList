@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="12dp"
     android:background="@android:color/white"
     android:padding="24dp"
-    tools:context=".ui.authorization.signup.SignUpFragment">
+    tools:context=".presenter.authorization.signup.SignUpFragment">
 
     <ProgressBar
         android:id="@+id/progressBar"
