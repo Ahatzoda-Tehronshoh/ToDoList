@@ -12,16 +12,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.LocalDataSource
+import com.tehronshoh.todolist.data.model.ToDoComments
 import com.tehronshoh.todolist.data.model.ToDoStatus
-import com.tehronshoh.todolist.databinding.BottomSheetDialogBinding
+import com.tehronshoh.todolist.databinding.CommentsBottomSheetDialogBinding
 import com.tehronshoh.todolist.databinding.FragmentUpdateBinding
+import com.tehronshoh.todolist.databinding.HistoryBottomSheetDialogBinding
 import com.tehronshoh.todolist.presenter.add.EditViewModel
 import com.tehronshoh.todolist.presenter.util.FCMSender
+import com.tehronshoh.todolist.presenter.util.getDateString
 import com.tehronshoh.todolist.presenter.viewmodel.factory.EditViewModelFactory
 import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
 import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
@@ -38,8 +42,7 @@ class UpdateFragment : Fragment() {
     private val args: UpdateFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
         return binding.root
@@ -56,6 +59,7 @@ class UpdateFragment : Fragment() {
         setArgumentsToViews()
         updateButtonClick()
         historyButtonListener()
+        commentsButtonListener()
 
         setViewsEditable()
     }
@@ -63,30 +67,78 @@ class UpdateFragment : Fragment() {
     private fun historyButtonListener() {
         binding.history.setOnClickListener {
             val dialog = BottomSheetDialog(requireContext())
-            val bottomSheetDialogBinding =
-                BottomSheetDialogBinding.inflate(layoutInflater, null, false)
-            setupHistoryRecyclerView(bottomSheetDialogBinding)
-            dialog.setContentView(bottomSheetDialogBinding.root)
+            val historyBottomSheetDialogBinding =
+                HistoryBottomSheetDialogBinding.inflate(layoutInflater, null, false)
+            setupHistoryRecyclerView(historyBottomSheetDialogBinding)
+            dialog.setContentView(historyBottomSheetDialogBinding.root)
             dialog.show()
         }
     }
 
-    private fun setupHistoryRecyclerView(bottomSheetDialogBinding: BottomSheetDialogBinding) {
+    private fun setupHistoryRecyclerView(historyBottomSheetDialogBinding: HistoryBottomSheetDialogBinding) {
         val historyAdapter = ToDoHistoryRecyclerViewAdapter()
-        bottomSheetDialogBinding.historyRv.apply {
+        historyBottomSheetDialogBinding.historyRv.apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = historyAdapter
         }
         editViewModel.getToDoHistory(args.todo.id).observe(viewLifecycleOwner) {
-            if(it.isEmpty())
-                bottomSheetDialogBinding.historyEmptyText.visibility = View.VISIBLE
-            else
-                bottomSheetDialogBinding.historyEmptyText.visibility = View.GONE
+            if (it.isEmpty()) historyBottomSheetDialogBinding.historyEmptyText.visibility =
+                View.VISIBLE
+            else historyBottomSheetDialogBinding.historyEmptyText.visibility = View.GONE
 
             historyAdapter.submitList(it)
         }
     }
+
+    private fun commentsButtonListener() {
+        binding.comments.setOnClickListener {
+            val dialog = BottomSheetDialog(requireContext())
+            val commentsBottomSheetDialogBinding =
+                CommentsBottomSheetDialogBinding.inflate(layoutInflater, null, false)
+
+            setupCommentsRecyclerView(commentsBottomSheetDialogBinding)
+
+            if (mainViewModel.loggedInUser.value?.email == args.todo.creatorEmail || mainViewModel.loggedInUser.value?.email == args.todo.assigneeEmail) {
+                commentsBottomSheetDialogBinding.commentsEditText.isEnabled = true
+
+                commentsBottomSheetDialogBinding.sendButton.setOnClickListener {
+                    if (commentsBottomSheetDialogBinding.commentsEditText.text?.isNotBlank() == true) {
+                        editViewModel.insertToDoComments(
+                            ToDoComments(
+                                todoId = args.todo.id,
+                                comment = commentsBottomSheetDialogBinding.commentsEditText.text.toString(),
+                                from = mainViewModel.loggedInUser.value?.email.toString(),
+                                date = Calendar.getInstance().getDateString()
+                            )
+                        )
+                        commentsBottomSheetDialogBinding.commentsEditText.text.clear()
+                    }
+                }
+            } else commentsBottomSheetDialogBinding.commentsEditText.isEnabled = false
+
+            dialog.setContentView(commentsBottomSheetDialogBinding.root)
+            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            dialog.show()
+        }
+    }
+
+    private fun setupCommentsRecyclerView(commentsBottomSheetDialogBinding: CommentsBottomSheetDialogBinding) {
+        val commentsAdapter = ToDoCommentsRecyclerViewAdapter(args.todo.creatorEmail)
+        commentsBottomSheetDialogBinding.commentsRv.apply {
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = commentsAdapter
+        }
+        editViewModel.getAllToDoComments(args.todo.id).observe(viewLifecycleOwner) {
+            if (it.isEmpty()) commentsBottomSheetDialogBinding.commentsEmptyText.visibility =
+                View.VISIBLE
+            else commentsBottomSheetDialogBinding.commentsEmptyText.visibility = View.GONE
+
+            commentsAdapter.submitList(it)
+        }
+    }
+
 
     private fun authorizationListener() {
         mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
@@ -104,7 +156,12 @@ class UpdateFragment : Fragment() {
 
         binding.apply {
             allowText.text =
-                if (!areUserCreator) requireContext().getString(R.string.you_can_not_edit) else ""
+                if (!areUserCreator && !areUserAssignee)
+                    requireContext().getString(R.string.you_can_not_edit)
+                else if (areUserAssignee)
+                    requireContext().getString(R.string.you_can_status_edit)
+                else
+                    ""
             titleInputLayout.isEnabled = areUserCreator
             descriptionInputLayout.isEnabled = areUserCreator
             assigneeSpinner.isEnabled = areUserCreator
@@ -139,8 +196,7 @@ class UpdateFragment : Fragment() {
                 mainViewModel.updateToDo(toDo, args.todo)
                 sendPushNotification(toDo)
                 findNavController().popBackStack()
-            } else
-                binding.titleInputLayout.error = "Title is required"
+            } else binding.titleInputLayout.error = "Title is required"
         }
     }
 
@@ -149,10 +205,8 @@ class UpdateFragment : Fragment() {
 
         FCMSender(
             "/topics/${toDo.id}",
-            if (mainViewModel.loggedInUser.value?.email == toDo.creatorEmail)
-                toDo.assigneeEmail
-            else
-                toDo.creatorEmail,
+            if (mainViewModel.loggedInUser.value?.email == toDo.creatorEmail) toDo.assigneeEmail
+            else toDo.creatorEmail,
             "Task:${toDo.title} was updated!",
             requireContext(),
             requireActivity()
@@ -199,16 +253,14 @@ class UpdateFragment : Fragment() {
 
         binding.dueDate.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { _, selectedYear, selectedMonth, selectedDay ->
+                requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
                     year = selectedYear
                     month = selectedMonth
                     day = selectedDay
 
                     val selectedDate = "$selectedDay-${selectedMonth + 1}-$selectedYear"
                     binding.dueDate.setText(selectedDate)
-                },
-                year, month, day
+                }, year, month, day
             )
             datePickerDialog.datePicker.minDate =
                 Calendar.getInstance().timeInMillis // Только будущие даты
@@ -218,16 +270,13 @@ class UpdateFragment : Fragment() {
 
     private fun setStatusSpinner() {
         val statuses = mutableListOf(
-            getString(R.string.waiting),
-            getString(R.string.in_process),
-            getString(R.string.done)
+            getString(R.string.waiting), getString(R.string.in_process), getString(R.string.done)
         )
 
         if (mainViewModel.loggedInUser.value?.email == args.todo.creatorEmail || ToDoStatus.valueOf(
                 args.todo.status
             ) == ToDoStatus.CLOSED
-        )
-            statuses.add(getString(R.string.closed))
+        ) statuses.add(getString(R.string.closed))
 
         ArrayAdapter<CharSequence>(
             requireContext(),
@@ -247,8 +296,7 @@ class UpdateFragment : Fragment() {
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(
-            requireActivity(),
-            mainViewModelFactory
+            requireActivity(), mainViewModelFactory
         )[MainViewModel::class.java]
 
         val editViewModelFactory =
@@ -256,8 +304,7 @@ class UpdateFragment : Fragment() {
 
         //getting activity's viewmodel
         editViewModel = ViewModelProvider(
-            requireActivity(),
-            editViewModelFactory
+            requireActivity(), editViewModelFactory
         )[EditViewModel::class.java]
     }
 

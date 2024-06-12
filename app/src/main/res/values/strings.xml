@@ -39,7 +39,9 @@
     <string name="status">Статус:</string>
     <string name="assignee">Исполнитель:</string>
     <string name="creator">Постановщик:</string>
-    <string name="you_can_not_edit">Вы не постановщик этой задачи!</string>
+    <string name="you_can_not_edit">Вы не сможете редактировать!</string>
+    <string name="you_can_status_edit">Вы сможете редактировать статус!</string>
     <string name="history_was_updated">Статус был поменен в:</string>
     <string name="history_empty">У задачи нет истории изменений.</string>
+    <string name="comments_empty">У задачи нет комментариев.</string>
 </resources>

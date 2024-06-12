@@ -6,6 +6,7 @@ import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDao
 import com.tehronshoh.todolist.data.ToDoHistoryDao
 import com.tehronshoh.todolist.data.model.ToDoHistory
+import com.tehronshoh.todolist.presenter.util.getDateString
 import java.util.Calendar
 
 class ToDoRepositoryImpl(
@@ -17,16 +18,11 @@ class ToDoRepositoryImpl(
     override suspend fun updateToDo(newToDo: ToDo, oldToDo: ToDo) {
         toDoDao.update(newToDo)
         if (newToDo.status != oldToDo.status) {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-
             toDoHistoryDao.create(
                 ToDoHistory(
                     todoId = newToDo.id,
                     newStatus = newToDo.status,
-                    changedAt = "$day-${month + 1}-$year"
+                    changedAt = Calendar.getInstance().getDateString()
                 )
             )
         }

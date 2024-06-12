@@ -137,7 +137,7 @@
         android:id="@+id/update_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginHorizontal="12dp"
         android:layout_marginVertical="8dp"
         android:text="@string/update_task"
         app:layout_constraintTop_toBottomOf="@id/scroll_view"
@@ -152,7 +152,19 @@
         android:contentDescription="history"
         android:src="@drawable/baseline_history_24"
         android:background="@color/transpater"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintEnd_toStartOf="@id/comments"
+        app:layout_constraintTop_toTopOf="@id/update_button"
+        app:layout_constraintBottom_toBottomOf="@id/update_button" />
+
+    <ImageButton
+        android:id="@+id/comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="comments"
+        android:src="@drawable/baseline_comment_24"
+        android:background="@color/transpater"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/update_button"
         app:layout_constraintBottom_toBottomOf="@id/update_button" />

@@ -3,6 +3,7 @@ package com.tehronshoh.todolist.presenter.viewmodel.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tehronshoh.todolist.data.LocalDataSource
+import com.tehronshoh.todolist.data.repository.impl.ToDoCommentsRepositoryImpl
 import com.tehronshoh.todolist.data.repository.impl.ToDoHistoryRepositoryImpl
 import com.tehronshoh.todolist.data.repository.impl.UserRepositoryImpl
 import com.tehronshoh.todolist.presenter.add.EditViewModel
@@ -13,7 +14,8 @@ class EditViewModelFactory(private val todoDataSource: LocalDataSource) :
         if (modelClass.isAssignableFrom(EditViewModel::class.java)) {
             return EditViewModel(
                 UserRepositoryImpl(todoDataSource.getUserDao()),
-                ToDoHistoryRepositoryImpl(todoDataSource.getToDoHistoryDao())
+                ToDoHistoryRepositoryImpl(todoDataSource.getToDoHistoryDao()),
+                ToDoCommentsRepositoryImpl(todoDataSource.getToDoCommentsDao())
             ) as T
         }
         return super.create(modelClass)

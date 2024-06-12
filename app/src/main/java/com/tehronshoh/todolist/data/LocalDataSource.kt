@@ -6,11 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tehronshoh.todolist.data.model.LoggedInUser
 import com.tehronshoh.todolist.data.model.ToDo
+import com.tehronshoh.todolist.data.model.ToDoComments
 import com.tehronshoh.todolist.data.model.ToDoHistory
 import com.tehronshoh.todolist.data.model.User
 
 @Database(
-    entities = [ToDo::class, User::class, LoggedInUser::class, ToDoHistory::class],
+    entities = [ToDo::class, User::class, LoggedInUser::class, ToDoHistory::class, ToDoComments::class],
     version = 1,
     exportSchema = false
 )
@@ -19,6 +20,7 @@ abstract class LocalDataSource : RoomDatabase() {
     abstract fun getUserDao(): UserDao
     abstract fun getLoggedInUserDao(): LoggedInUserDao
     abstract fun getToDoHistoryDao(): ToDoHistoryDao
+    abstract fun getToDoCommentsDao(): ToDoCommentsDao
 
     companion object {
         @Volatile
