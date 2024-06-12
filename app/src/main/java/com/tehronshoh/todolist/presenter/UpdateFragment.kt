@@ -10,11 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.model.ToDo
-import com.tehronshoh.todolist.data.ToDoDataSource
+import com.tehronshoh.todolist.data.LocalDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
+import com.tehronshoh.todolist.databinding.BottomSheetDialogBinding
 import com.tehronshoh.todolist.databinding.FragmentUpdateBinding
 import com.tehronshoh.todolist.presenter.add.EditViewModel
 import com.tehronshoh.todolist.presenter.util.FCMSender
@@ -45,13 +49,51 @@ class UpdateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
 
+        authorizationListener()
         setupDatePicker()
         setStatusSpinner()
         setAssigneeSpinner()
         setArgumentsToViews()
         updateButtonClick()
+        historyButtonListener()
 
         setViewsEditable()
+    }
+
+    private fun historyButtonListener() {
+        binding.history.setOnClickListener {
+            val dialog = BottomSheetDialog(requireContext())
+            val bottomSheetDialogBinding =
+                BottomSheetDialogBinding.inflate(layoutInflater, null, false)
+            setupHistoryRecyclerView(bottomSheetDialogBinding)
+            dialog.setContentView(bottomSheetDialogBinding.root)
+            dialog.show()
+        }
+    }
+
+    private fun setupHistoryRecyclerView(bottomSheetDialogBinding: BottomSheetDialogBinding) {
+        val historyAdapter = ToDoHistoryRecyclerViewAdapter()
+        bottomSheetDialogBinding.historyRv.apply {
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = historyAdapter
+        }
+        editViewModel.getToDoHistory(args.todo.id).observe(viewLifecycleOwner) {
+            if(it.isEmpty())
+                bottomSheetDialogBinding.historyEmptyText.visibility = View.VISIBLE
+            else
+                bottomSheetDialogBinding.historyEmptyText.visibility = View.GONE
+
+            historyAdapter.submitList(it)
+        }
+    }
+
+    private fun authorizationListener() {
+        mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
+            if (it == null) {
+                findNavController().navigate(R.id.action_updateFragment_to_signUpFragment)
+            }
+        }
     }
 
     private fun setViewsEditable() {
@@ -69,8 +111,7 @@ class UpdateFragment : Fragment() {
             dueDateInputLayout.isEnabled = areUserCreator
 
             statusSpinner.isEnabled = areUserCreator || areUserAssignee
-            updateButton.visibility =
-                if (areUserCreator || areUserAssignee) View.VISIBLE else View.GONE
+            updateButton.isEnabled = areUserCreator || areUserAssignee
         }
     }
 
@@ -95,7 +136,7 @@ class UpdateFragment : Fragment() {
                     creatorEmail = args.todo.creatorEmail,
                     assigneeEmail = binding.assigneeSpinner.selectedItem.toString()
                 )
-                mainViewModel.updateToDo(toDo)
+                mainViewModel.updateToDo(toDo, args.todo)
                 sendPushNotification(toDo)
                 findNavController().popBackStack()
             } else
@@ -108,7 +149,7 @@ class UpdateFragment : Fragment() {
 
         FCMSender(
             "/topics/${toDo.id}",
-            if(mainViewModel.loggedInUser.value?.email == toDo.creatorEmail)
+            if (mainViewModel.loggedInUser.value?.email == toDo.creatorEmail)
                 toDo.assigneeEmail
             else
                 toDo.creatorEmail,
@@ -202,7 +243,7 @@ class UpdateFragment : Fragment() {
 
     private fun initViewModel() {
         val mainViewModelFactory =
-            MainViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(
@@ -211,7 +252,7 @@ class UpdateFragment : Fragment() {
         )[MainViewModel::class.java]
 
         val editViewModelFactory =
-            EditViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            EditViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         editViewModel = ViewModelProvider(

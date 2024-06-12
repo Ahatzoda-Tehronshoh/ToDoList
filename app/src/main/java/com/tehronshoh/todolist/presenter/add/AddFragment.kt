@@ -13,7 +13,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 import com.tehronshoh.todolist.data.model.ToDo
-import com.tehronshoh.todolist.data.ToDoDataSource
+import com.tehronshoh.todolist.data.LocalDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.FragmentAddBinding
 import com.tehronshoh.todolist.presenter.viewmodel.factory.EditViewModelFactory
@@ -40,10 +40,19 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
 
+        authorizationListener()
         setupDatePicker()
         setStatusSpinner()
         setAssigneeSpinner()
         addButtonClicked()
+    }
+
+    private fun authorizationListener() {
+        mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
+            if (it == null) {
+                findNavController().navigate(R.id.action_addFragment_to_signUpFragment)
+            }
+        }
     }
 
     private fun setupDatePicker() {
@@ -135,7 +144,7 @@ class AddFragment : Fragment() {
 
     private fun initViewModel() {
         val mainViewModelFactory =
-            MainViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(
@@ -144,7 +153,7 @@ class AddFragment : Fragment() {
         )[MainViewModel::class.java]
 
         val editViewModelFactory =
-            EditViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            EditViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         editViewModel = ViewModelProvider(

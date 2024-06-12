@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.data.ToDoDataSource
+import com.tehronshoh.todolist.data.LocalDataSource
 import com.tehronshoh.todolist.databinding.SplashScreenFragmentBinding
 import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
 import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
@@ -59,7 +59,7 @@ class SplashScreenFragment: Fragment() {
 
     private fun initViewModel() {
         val mainViewModelFactory =
-            MainViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(

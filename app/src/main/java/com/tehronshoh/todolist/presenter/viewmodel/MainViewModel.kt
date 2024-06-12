@@ -45,9 +45,9 @@ class MainViewModel(
         }
     }
 
-    fun updateToDo(toDo: ToDo) {
+    fun updateToDo(newToDo: ToDo, oldToDo: ToDo) {
         viewModelScope.launch(Dispatchers.IO) {
-            toDoRepository.updateToDo(toDo)
+            toDoRepository.updateToDo(newToDo, oldToDo)
         }
     }
 

@@ -2,12 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transpater">#00FFFFFF</color>
 
     <color name="colorPrimary">#0fbcf9</color>
     <color name="primary_100">#1A0FBCF9</color>
 
     <color name="due_date_color">#FF0000</color>
-    <color name="waiting_status_color">#FFEE58</color>
+    <color name="waiting_status_color">#E29A42</color>
     <color name="in_process_status_color">#2196F3</color>
     <color name="done_status_color">#9E9E9E</color>
     <color name="closed_status_color">#4CAF50</color>

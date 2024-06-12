@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.data.ToDoDataSource
+import com.tehronshoh.todolist.data.LocalDataSource
 import com.tehronshoh.todolist.databinding.FragmentMainBinding
 import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
 import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
@@ -49,7 +49,7 @@ class MainFragment : Fragment() {
 
     private fun initViewModel() {
         val mainViewModelFactory =
-            MainViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(

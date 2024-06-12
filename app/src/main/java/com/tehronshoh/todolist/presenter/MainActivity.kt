@@ -17,10 +17,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.data.ToDoDataSource
+import com.tehronshoh.todolist.data.LocalDataSource
 import com.tehronshoh.todolist.databinding.ActivityMainBinding
 import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
 import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
@@ -86,14 +84,13 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.mainFragment -> {
-                    binding.mainToolbar.menu.getItem(1).setVisible(true)
                     binding.mainToolbar.navigationIcon = null
                     binding.mainToolbar.visibility = VISIBLE
                 }
 
                 R.id.addFragment, R.id.updateFragment -> {
-                    binding.mainToolbar.menu.getItem(1).setVisible(false)
-                    binding.mainToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.back_button)
+                    binding.mainToolbar.navigationIcon =
+                        ContextCompat.getDrawable(this, R.drawable.back_button)
                     binding.mainToolbar.setNavigationOnClickListener {
                         navController.popBackStack()
                     }
@@ -107,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         val mainViewModelFactory =
-            MainViewModelFactory(ToDoDataSource.getInstance(this))
+            MainViewModelFactory(LocalDataSource.getInstance(this))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(

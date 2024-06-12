@@ -5,9 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="8dp"
+    android:background="@color/transpater"
     tools:context=".presenter.UpdateFragment">
 
+    <TextView
+        android:id="@+id/allow_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/due_date_color"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="none"
@@ -117,29 +129,32 @@
                 app:layout_constraintStart_toEndOf="@id/assigneeInputLayout"
                 app:layout_constraintTop_toTopOf="@id/assigneeInputLayout" />
 
-            <TextView
-                android:id="@+id/allow_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/due_date_color"
-                android:layout_marginVertical="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/assigneeInputLayout"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
     <Button
         android:id="@+id/update_button"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginVertical="8dp"
         android:text="@string/update_task"
+        app:layout_constraintTop_toBottomOf="@id/scroll_view"
+        app:layout_constraintEnd_toStartOf="@id/history"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="history"
+        android:src="@drawable/baseline_history_24"
+        android:background="@color/transpater"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/update_button"
+        app:layout_constraintBottom_toBottomOf="@id/update_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

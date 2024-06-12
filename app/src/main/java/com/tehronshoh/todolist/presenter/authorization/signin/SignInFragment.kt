@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.data.ToDoDataSource
+import com.tehronshoh.todolist.data.LocalDataSource
 import com.tehronshoh.todolist.databinding.FragmentSignInBinding
 import com.tehronshoh.todolist.presenter.viewmodel.MainViewModel
 import com.tehronshoh.todolist.presenter.viewmodel.factory.MainViewModelFactory
@@ -71,7 +71,7 @@ class SignInFragment : Fragment() {
 
     private fun initViewModel() {
         val signInViewModelFactory =
-            SignInViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            SignInViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         signInViewModel = ViewModelProvider(
@@ -80,7 +80,7 @@ class SignInFragment : Fragment() {
         )[SignInViewModel::class.java]
 
         val mainViewModelFactory =
-            MainViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(

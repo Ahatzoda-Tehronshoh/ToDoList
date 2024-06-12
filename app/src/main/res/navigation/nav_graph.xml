@@ -25,7 +25,13 @@
         android:id="@+id/addFragment"
         android:name="com.tehronshoh.todolist.presenter.add.AddFragment"
         android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_addFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/updateFragment"
         android:name="com.tehronshoh.todolist.presenter.UpdateFragment"
@@ -34,6 +40,11 @@
         <argument
             android:name="todo"
             app:argType="com.tehronshoh.todolist.data.model.ToDo" />
+        <action
+            android:id="@+id/action_updateFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
