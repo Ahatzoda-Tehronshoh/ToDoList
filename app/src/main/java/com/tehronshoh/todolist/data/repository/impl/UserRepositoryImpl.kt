@@ -13,4 +13,6 @@ class UserRepositoryImpl(private val userDao: UserDao): UserRepository {
 
     override suspend fun isUserExist(email: String, password: String): User? =
         userDao.isUserExist(email, password)
+
+    override fun getAllUsersEmail(): LiveData<List<String>> = userDao.getAllUsersEmail()
 }

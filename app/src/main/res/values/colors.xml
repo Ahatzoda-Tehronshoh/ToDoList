@@ -6,6 +6,7 @@
     <color name="colorPrimary">#0fbcf9</color>
     <color name="primary_100">#1A0FBCF9</color>
 
+    <color name="due_date_color">#FF0000</color>
     <color name="waiting_status_color">#FFEB3B</color>
     <color name="in_process_status_color">#2196F3</color>
     <color name="done_status_color">#4CAF50</color>

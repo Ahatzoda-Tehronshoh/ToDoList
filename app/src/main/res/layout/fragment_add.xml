@@ -63,9 +63,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="16dp"
-                android:text="Статус:"
+                android:text="@string/status"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/descriptionInputLayout"/>
+                app:layout_constraintTop_toBottomOf="@id/descriptionInputLayout" />
 
             <Spinner
                 android:id="@+id/statusSpinner"
@@ -75,7 +75,46 @@
                 app:layout_constraintBottom_toBottomOf="@id/statusInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/statusInputLayout"
-                app:layout_constraintTop_toTopOf="@id/statusInputLayout"/>
+                app:layout_constraintTop_toTopOf="@id/statusInputLayout" />
+
+            <!-- Date Picker for dueDate -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dueDateInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:hint="Дедлайн"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/statusInputLayout" >
+
+                <EditText
+                    android:id="@+id/dueDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/assigneeInputLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:text="@string/assignee"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dueDateInputLayout" />
+
+            <Spinner
+                android:id="@+id/assigneeSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="@id/assigneeInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/assigneeInputLayout"
+                app:layout_constraintTop_toTopOf="@id/assigneeInputLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

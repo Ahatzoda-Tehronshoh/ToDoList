@@ -1,5 +1,6 @@
 package com.tehronshoh.todolist.ui.add
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,8 +15,9 @@ import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.FragmentAddBinding
+import com.tehronshoh.todolist.ui.util.EditViewModelFactory
 import com.tehronshoh.todolist.ui.util.MainViewModelFactory
-import java.util.Arrays
+import java.util.Calendar
 
 class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
@@ -23,6 +25,7 @@ class AddFragment : Fragment() {
         get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var editViewModel: EditViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +38,49 @@ class AddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+
+        setupDatePicker()
         setStatusSpinner()
+        setAssigneeSpinner()
         addButtonClicked()
     }
+
+    private fun setupDatePicker() {
+        val calendar = Calendar.getInstance()
+        var year = calendar.get(Calendar.YEAR)
+        var month = calendar.get(Calendar.MONTH)
+        var day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        binding.dueDate.setText("$day-${month + 1}-$year")
+        binding.dueDate.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    year = selectedYear
+                    month = selectedMonth
+                    day = selectedDay
+
+                    val selectedDate = "$selectedDay-${selectedMonth + 1}-$selectedYear"
+                    binding.dueDate.setText(selectedDate)
+                },
+                year, month, day
+            )
+            datePickerDialog.datePicker.minDate = calendar.timeInMillis // Только будущие даты
+            datePickerDialog.show()
+        }
+    }
+
+    private fun setAssigneeSpinner() =
+        editViewModel.getAllUsersEmail().observe(viewLifecycleOwner) { usersEmail ->
+            ArrayAdapter<CharSequence>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                usersEmail,
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.assigneeSpinner.adapter = adapter
+            }
+        }
 
     private fun setStatusSpinner() {
         val statuses = arrayOf(
@@ -64,9 +107,10 @@ class AddFragment : Fragment() {
                 val toDo = ToDo(
                     title = binding.title.text.toString(),
                     description = binding.description.text.toString(),
-                    dueDate = System.currentTimeMillis(),
+                    dueDate = binding.dueDate.text.toString(),
                     status = getStatus(binding.statusSpinner.selectedItem.toString()),
-                    userId = mainViewModel.loggedInUser.value?.id ?: 0L
+                    creatorEmail = mainViewModel.loggedInUser.value?.email ?: "",
+                    assigneeEmail = binding.assigneeSpinner.selectedItem.toString()
                 )
                 mainViewModel.createToDo(toDo)
                 findNavController().popBackStack()
@@ -93,6 +137,15 @@ class AddFragment : Fragment() {
             requireActivity(),
             mainViewModelFactory
         )[MainViewModel::class.java]
+
+        val editViewModelFactory =
+            EditViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+
+        //getting activity's viewmodel
+        editViewModel = ViewModelProvider(
+            requireActivity(),
+            editViewModelFactory
+        )[EditViewModel::class.java]
     }
 
     override fun onDestroyView() {

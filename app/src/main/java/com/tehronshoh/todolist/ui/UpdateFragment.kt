@@ -1,11 +1,11 @@
 package com.tehronshoh.todolist.ui
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,7 +15,10 @@ import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.FragmentUpdateBinding
+import com.tehronshoh.todolist.ui.add.EditViewModel
+import com.tehronshoh.todolist.ui.util.EditViewModelFactory
 import com.tehronshoh.todolist.ui.util.MainViewModelFactory
+import java.util.Calendar
 
 class UpdateFragment : Fragment() {
     private var _binding: FragmentUpdateBinding? = null
@@ -23,6 +26,7 @@ class UpdateFragment : Fragment() {
         get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var editViewModel: EditViewModel
 
     private val args: UpdateFragmentArgs by navArgs()
 
@@ -36,9 +40,11 @@ class UpdateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViewModel()
+
+        setupDatePicker()
         setStatusSpinner()
+        setAssigneeSpinner()
         setArgumentsToViews()
         updateButtonClick()
     }
@@ -48,6 +54,7 @@ class UpdateFragment : Fragment() {
             binding.title.setText(title)
             binding.description.setText(description)
             binding.statusSpinner.setSelection(getStatusTextIndex(ToDoStatus.valueOf(args.todo.status)))
+            binding.dueDate.setText(dueDate)
         }
     }
 
@@ -58,9 +65,10 @@ class UpdateFragment : Fragment() {
                     id = args.todo.id,
                     title = binding.title.text.toString(),
                     description = binding.description.text.toString(),
-                    dueDate = System.currentTimeMillis(),
+                    dueDate = binding.dueDate.text.toString(),
                     status = getStatus(binding.statusSpinner.selectedItem.toString()),
-                    userId = mainViewModel.loggedInUser.value?.id ?: 0L
+                    creatorEmail = args.todo.creatorEmail,
+                    assigneeEmail = binding.assigneeSpinner.selectedItem.toString()
                 )
                 mainViewModel.updateToDo(toDo)
                 findNavController().popBackStack()
@@ -83,6 +91,43 @@ class UpdateFragment : Fragment() {
             ToDoStatus.WAITING -> 0
             ToDoStatus.IN_PROCESS -> 1
             ToDoStatus.DONE -> 2
+        }
+    }
+
+    private fun setAssigneeSpinner() =
+        editViewModel.getAllUsersEmail().observe(viewLifecycleOwner) { usersEmail ->
+            ArrayAdapter<CharSequence>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                usersEmail,
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.assigneeSpinner.adapter = adapter
+                binding.assigneeSpinner.setSelection(adapter.getPosition(args.todo.assigneeEmail))
+            }
+        }
+
+    private fun setupDatePicker() {
+        val date = args.todo.dueDate.split("-")
+        var year = date[2].toInt()
+        var month = date[1].toInt() - 1
+        var day = date[0].toInt()
+
+        binding.dueDate.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    year = selectedYear
+                    month = selectedMonth
+                    day = selectedDay
+
+                    val selectedDate = "$selectedDay-${selectedMonth + 1}-$selectedYear"
+                    binding.dueDate.setText(selectedDate)
+                },
+                year, month, day
+            )
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis // Только будущие даты
+            datePickerDialog.show()
         }
     }
 
@@ -114,6 +159,15 @@ class UpdateFragment : Fragment() {
             requireActivity(),
             mainViewModelFactory
         )[MainViewModel::class.java]
+
+        val editViewModelFactory =
+            EditViewModelFactory(ToDoDataSource.getInstance(requireContext()))
+
+        //getting activity's viewmodel
+        editViewModel = ViewModelProvider(
+            requireActivity(),
+            editViewModelFactory
+        )[EditViewModel::class.java]
     }
 
     override fun onDestroyView() {

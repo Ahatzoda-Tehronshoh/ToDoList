@@ -16,4 +16,7 @@ abstract class UserDao {
 
     @Query("SELECT * FROM user WHERE email = :email AND password = :password")
     abstract suspend fun isUserExist(email: String, password: String): User?
+
+    @Query("SELECT email FROM user")
+    abstract fun getAllUsersEmail(): LiveData<List<String>>
 }

@@ -24,6 +24,14 @@ class ToDoRecyclerViewAdapter : ListAdapter<ToDo, ToDoRecyclerViewAdapter.ToDoVi
         fun bind(todo: ToDo) {
             binding.title.text = todo.title
             binding.description.text = todo.description
+            binding.creator.text = todo.creatorEmail
+            binding.assignee.text = todo.assigneeEmail
+            binding.due.text = todo.dueDate.toString()
+
+            setStatus(todo)
+        }
+
+        private fun setStatus(todo: ToDo) {
             when (ToDoStatus.valueOf(todo.status)) {
                 ToDoStatus.WAITING -> {
                     binding.statusText.text = binding.root.context.getString(R.string.waiting)

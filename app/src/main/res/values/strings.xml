@@ -34,4 +34,7 @@
     <string name="waiting">Ожидание</string>
     <string name="in_process">В процессе</string>
     <string name="done">Завершена</string>
+    <string name="status">Статус:</string>
+    <string name="assignee">Исполнитель:</string>
+    <string name="creator">Постановщик:</string>
 </resources>

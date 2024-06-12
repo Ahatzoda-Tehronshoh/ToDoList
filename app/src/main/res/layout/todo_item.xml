@@ -20,11 +20,11 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
+        android:layout_marginTop="4dp"
         android:textAppearance="?attr/textAppearanceListItem"
         app:layout_constraintEnd_toStartOf="@id/status_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/status_card"
-        app:layout_constraintTop_toTopOf="@id/status_card" />
+        app:layout_constraintTop_toBottomOf="@id/status_card" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/status_card"
@@ -51,14 +51,93 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/due_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        android:elevation="0dp"
+        android:translationZ="0dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="@color/due_date_color"
+        app:layout_constraintEnd_toStartOf="@id/status_card"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/due"
+            tools:text="12.06.2024"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="8dp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.card.MaterialCardView>
+
     <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="5"
+        android:textSize="12sp"
+        android:background="@color/primary_100"
         app:layout_constraintEnd_toStartOf="@id/delete_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_card" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:id="@+id/creator_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textSize="12sp"
+        android:text="@string/creator"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description" />
+
+    <TextView
+        android:id="@+id/creator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textSize="12sp"
+        tools:text="alif@mail.ru"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/creator_text"
+        app:layout_constraintTop_toTopOf="@id/creator_text"
+        app:layout_constraintBottom_toBottomOf="@id/creator_text"/>
+
+    <TextView
+        android:id="@+id/assignee_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textSize="12sp"
+        android:maxLines="5"
+        android:text="@string/assignee"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/creator_text" />
+
+    <TextView
+        android:id="@+id/assignee"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="5"
+        tools:text="tehronkarimov55@mail.ru"
+        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/assignee_text"
+        app:layout_constraintTop_toTopOf="@id/assignee_text"
+        app:layout_constraintBottom_toBottomOf="@id/assignee_text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
