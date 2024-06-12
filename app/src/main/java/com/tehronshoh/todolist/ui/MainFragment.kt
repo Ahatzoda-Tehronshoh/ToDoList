@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.databinding.FragmentMainBinding
@@ -77,6 +78,7 @@ class MainFragment : Fragment() {
                 columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
             }
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = toDoAdapter.also {
                 it.onItemClickListener = { toDo ->
                     val action = MainFragmentDirections.actionMainFragmentToUpdateFragment(toDo)

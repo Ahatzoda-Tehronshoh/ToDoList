@@ -27,7 +27,6 @@
                 android:layout_marginVertical="8dp"
                 android:hint="@string/title"
                 app:boxStrokeColor="@color/colorPrimary"
-                app:layout_constraintBottom_toTopOf="@id/descriptionInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -46,7 +45,6 @@
                 android:layout_marginVertical="8dp"
                 android:hint="@string/description"
                 app:boxStrokeColor="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/titleInputLayout">
@@ -59,6 +57,25 @@
                     android:minHeight="100dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/statusInputLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:text="Статус:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/descriptionInputLayout"/>
+
+            <Spinner
+                android:id="@+id/statusSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="@id/statusInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/statusInputLayout"
+                app:layout_constraintTop_toTopOf="@id/statusInputLayout"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

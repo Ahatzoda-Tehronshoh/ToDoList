@@ -30,4 +30,8 @@
     <string name="login_failed">"Login failed"</string>
     <string name="logout">Выйти</string>
     <string name="data">Мои данные</string>
+
+    <string name="waiting">Ожидание</string>
+    <string name="in_process">В процессе</string>
+    <string name="done">Завершена</string>
 </resources>
