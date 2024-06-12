@@ -7,55 +7,53 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.tehronshoh.todolist.data.model.ToDo
+import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
-import com.tehronshoh.todolist.databinding.FragmentUpdateBinding
+import com.tehronshoh.todolist.databinding.FragmentSignInBinding
+import com.tehronshoh.todolist.databinding.SplashScreenFragmentBinding
 import com.tehronshoh.todolist.ui.util.MainViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class UpdateFragment : Fragment() {
-    private var _binding: FragmentUpdateBinding? = null
+class SplashScreenFragment: Fragment() {
+    private var _binding: SplashScreenFragmentBinding? = null
     private val binding
         get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
 
-    private val args: UpdateFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        _binding = SplashScreenFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initViewModel()
-        setArgumentsToViews()
-        updateButtonClick()
+        loading()
     }
 
-    private fun setArgumentsToViews() {
-        args.todo.apply {
-            binding.title.setText(title)
-            binding.description.setText(description)
-        }
-    }
+    private fun loading() {
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(1500)
+            withContext(Dispatchers.Main) {
+                mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
+                    if (it != null)
+                        findNavController().navigate(R.id.action_splashScreenFragment_to_mainFragment)
+                    else
+                        findNavController().navigate(R.id.action_splashScreenFragment_to_signUpFragment)
 
-    private fun updateButtonClick() {
-        binding.updateButton.setOnClickListener {
-            if (binding.title.text?.isNotBlank() == true) {
-                val toDo = ToDo(
-                    id = args.todo.id,
-                    title = binding.title.text.toString(),
-                    description = binding.description.text.toString()
-                )
-                mainViewModel.updateToDo(toDo)
-                findNavController().popBackStack()
-            } else
-                binding.titleInputLayout.error = "Title is required"
+                    mainViewModel.loggedInUser.removeObservers(viewLifecycleOwner)
+                }
+            }
         }
     }
 

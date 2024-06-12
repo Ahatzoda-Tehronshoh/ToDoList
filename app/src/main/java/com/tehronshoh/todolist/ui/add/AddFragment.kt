@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.tehronshoh.todolist.ui.MainViewModel
-import com.tehronshoh.todolist.data.ToDo
+import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.databinding.FragmentAddBinding
 import com.tehronshoh.todolist.ui.util.MainViewModelFactory

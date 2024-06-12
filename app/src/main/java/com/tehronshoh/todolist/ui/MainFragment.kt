@@ -38,9 +38,11 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initViewModel()
         setupRecyclerView()
         addButtonClick()
+        authorizationListener()
     }
 
     private fun initViewModel() {
@@ -52,6 +54,14 @@ class MainFragment : Fragment() {
             requireActivity(),
             mainViewModelFactory
         )[MainViewModel::class.java]
+    }
+
+    private fun authorizationListener() {
+        mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
+            if (it == null) {
+                findNavController().navigate(R.id.action_mainFragment_to_signUpFragment)
+            }
+        }
     }
 
     private fun addButtonClick() {

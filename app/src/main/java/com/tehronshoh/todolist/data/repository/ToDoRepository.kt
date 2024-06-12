@@ -1,7 +1,7 @@
 package com.tehronshoh.todolist.data.repository
 
 import androidx.lifecycle.LiveData
-import com.tehronshoh.todolist.data.ToDo
+import com.tehronshoh.todolist.data.model.ToDo
 
 interface ToDoRepository {
     suspend fun createToDo(toDo: ToDo)

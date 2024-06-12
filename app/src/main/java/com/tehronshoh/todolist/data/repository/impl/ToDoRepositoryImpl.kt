@@ -2,7 +2,7 @@ package com.tehronshoh.todolist.data.repository.impl
 
 import androidx.lifecycle.LiveData
 import com.tehronshoh.todolist.data.repository.ToDoRepository
-import com.tehronshoh.todolist.data.ToDo
+import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.ToDoDao
 
 class ToDoRepositoryImpl(private val toDoDao: ToDoDao): ToDoRepository {
