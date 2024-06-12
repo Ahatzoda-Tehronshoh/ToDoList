@@ -1,17 +1,18 @@
 package com.tehronshoh.todolist.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.ToDoDataSource
 import com.tehronshoh.todolist.databinding.ActivityMainBinding
@@ -38,9 +39,35 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        
+
+        navControllerControl()
     }
 
+    private fun navControllerControl() {
+        val navController =
+            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.mainFragment -> {
+                    binding.mainToolbar.menu.getItem(1).setVisible(true)
+                    binding.mainToolbar.navigationIcon = null
+                    binding.mainToolbar.visibility = VISIBLE
+                }
+
+                R.id.addFragment, R.id.updateFragment -> {
+                    binding.mainToolbar.menu.getItem(1).setVisible(false)
+                    binding.mainToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.back_button)
+                    binding.mainToolbar.setNavigationOnClickListener {
+                        navController.popBackStack()
+                    }
+                    binding.mainToolbar.visibility = VISIBLE
+                }
+
+                else -> binding.mainToolbar.visibility = GONE
+            }
+        }
+    }
 
     private fun initViewModel() {
         val mainViewModelFactory =
@@ -61,7 +88,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_data -> {
-                Toast.makeText(this, mainViewModel.loggedInUser.value?.email, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, mainViewModel.loggedInUser.value?.email, Toast.LENGTH_SHORT)
+                    .show()
             }
 
             R.id.action_log_out -> {
