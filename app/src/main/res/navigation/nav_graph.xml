@@ -6,7 +6,7 @@
     app:startDestination="@id/splashScreenFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.tehronshoh.todolist.presenter.MainFragment"
+        android:name="com.tehronshoh.todolist.presentation.ui.home.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/addFragment"
-        android:name="com.tehronshoh.todolist.presenter.add.AddFragment"
+        android:name="com.tehronshoh.todolist.presentation.ui.add_update.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateFragment"
-        android:name="com.tehronshoh.todolist.presenter.UpdateFragment"
+        android:name="com.tehronshoh.todolist.presentation.ui.add_update.UpdateFragment"
         android:label="fragment_update"
         tools:layout="@layout/fragment_update" >
         <argument
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.tehronshoh.todolist.presenter.SplashScreenFragment"
+        android:name="com.tehronshoh.todolist.presentation.ui.SplashScreenFragment"
         android:label="splash_screen_fragment"
         tools:layout="@layout/splash_screen_fragment" >
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.tehronshoh.todolist.presenter.authorization.signup.SignUpFragment"
+        android:name="com.tehronshoh.todolist.presentation.ui.authorization.signup.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.tehronshoh.todolist.presenter.authorization.signin.SignInFragment"
+        android:name="com.tehronshoh.todolist.presentation.ui.authorization.signin.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action

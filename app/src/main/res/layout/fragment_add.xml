@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="8dp"
-    tools:context=".presenter.add.AddFragment">
+    tools:context=".presentation.ui.add_update.AddFragment">
 
     <ScrollView
         android:layout_width="match_parent"
