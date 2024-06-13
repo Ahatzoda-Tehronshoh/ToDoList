@@ -1,8 +1,6 @@
 package com.tehronshoh.todolist.presentation.ui
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
+
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -47,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         navControllerControl()
     }
 
-    // Declare the launcher at the top of your Activity/Fragment:
+/** permission for push notifications
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
@@ -74,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
-    }
+    }*/
 
     private fun navControllerControl() {
         val navController =
