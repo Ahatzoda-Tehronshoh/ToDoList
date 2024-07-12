@@ -2,6 +2,7 @@ package com.tehronshoh.todolist.presentation.ui
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -14,10 +15,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.datasource.LocalDataSource
 import com.tehronshoh.todolist.databinding.ActivityMainBinding
+import com.tehronshoh.todolist.presentation.util.NotificationWorker
 import com.tehronshoh.todolist.presentation.util.factory.MainViewModelFactory
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -42,35 +47,54 @@ class MainActivity : AppCompatActivity() {
         }
 
         navControllerControl()
+        startWorkManager()
     }
 
-/** permission for push notifications
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // FCM SDK (and your app) can post notifications.
+    private fun startWorkManager() {
+        val notificationRequest = PeriodicWorkRequestBuilder<NotificationWorker>(
+            repeatInterval = 15,
+            repeatIntervalTimeUnit = TimeUnit.MINUTES,
+            flexTimeInterval = 10,
+            flexTimeIntervalUnit = TimeUnit.MINUTES
+        ).build()
 
-        }
+        val workManager = WorkManager.getInstance(this)
+        workManager.cancelAllWork()
+
+        workManager.getWorkInfoByIdLiveData(notificationRequest.id)
+            .observe(this) {
+                Log.d("TAG_TEST", "Work status: ${it.state}")
+            }
+        workManager.enqueue(notificationRequest)
+    }
+
+    /** permission for push notifications
+    private val requestPermissionLauncher = registerForActivityResult(
+    ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+    if (isGranted) {
+    // FCM SDK (and your app) can post notifications.
+
+    }
     }
 
     private fun askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-                // FCM SDK (and your app) can post notifications.
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
+    // This is only necessary for API level >= 33 (TIRAMISU)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+    PackageManager.PERMISSION_GRANTED
+    ) {
+    // FCM SDK (and your app) can post notifications.
+    } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+    // TODO: display an educational UI explaining to the user the features that will be enabled
+    //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+    //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+    //       If the user selects "No thanks," allow the user to continue without notifications.
+    } else {
+    // Directly ask for the permission
+    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+    }
     }*/
 
     private fun navControllerControl() {
@@ -99,13 +123,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        val mainViewModelFactory =
-            MainViewModelFactory(LocalDataSource.getInstance(this))
+        val mainViewModelFactory = MainViewModelFactory(LocalDataSource.getInstance(this))
 
         //getting activity's viewmodel
         mainViewModel = ViewModelProvider(
-            this,
-            mainViewModelFactory
+            this, mainViewModelFactory
         )[MainViewModel::class.java]
     }
 

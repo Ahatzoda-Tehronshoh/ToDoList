@@ -79,4 +79,11 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging.ktx)
+
+    //Dependency Injection - Dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
 }
