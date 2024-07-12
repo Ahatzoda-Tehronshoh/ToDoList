@@ -4,7 +4,9 @@ package com.tehronshoh.todolist.presentation.service
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.tehronshoh.todolist.presentation.util.sendLocalNotification
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FirebasePushService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {

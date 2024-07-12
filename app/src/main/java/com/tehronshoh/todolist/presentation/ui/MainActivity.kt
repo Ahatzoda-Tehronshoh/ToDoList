@@ -9,27 +9,27 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.data.datasource.LocalDataSource
 import com.tehronshoh.todolist.databinding.ActivityMainBinding
 import com.tehronshoh.todolist.presentation.util.NotificationWorker
-import com.tehronshoh.todolist.presentation.util.factory.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        initViewModel()
+        //initViewModel()
 
         setSupportActionBar(binding.mainToolbar)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         navControllerControl()
-        startWorkManager()
+        // startWorkManager()
     }
 
     private fun startWorkManager() {
@@ -120,15 +120,6 @@ class MainActivity : AppCompatActivity() {
                 else -> binding.mainToolbar.visibility = GONE
             }
         }
-    }
-
-    private fun initViewModel() {
-        val mainViewModelFactory = MainViewModelFactory(LocalDataSource.getInstance(this))
-
-        //getting activity's viewmodel
-        mainViewModel = ViewModelProvider(
-            this, mainViewModelFactory
-        )[MainViewModel::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

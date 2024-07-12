@@ -7,10 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.tehronshoh.todolist.data.model.LoggedInUser
 import com.tehronshoh.todolist.domain.repository.LoggedInUserRepository
 import com.tehronshoh.todolist.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignInViewModel(
+@HiltViewModel
+class SignInViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val loggedInUserRepository: LoggedInUserRepository
 ) : ViewModel() {

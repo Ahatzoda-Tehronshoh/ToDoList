@@ -5,6 +5,8 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
+
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -80,10 +82,10 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging.ktx)
 
-    //Dependency Injection - Dagger
-    implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
-
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
+
+    // Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:2.51")
+    ksp("com.google.dagger:hilt-android-compiler:2.51")
 }

@@ -2,32 +2,32 @@ package com.tehronshoh.todolist.presentation.ui.home
 
 import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.data.datasource.LocalDataSource
 import com.tehronshoh.todolist.databinding.FragmentMainBinding
-import com.tehronshoh.todolist.presentation.ui.home.adapter.ToDoRecyclerViewAdapter
 import com.tehronshoh.todolist.presentation.ui.MainViewModel
-import com.tehronshoh.todolist.presentation.util.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presentation.ui.home.adapter.ToDoRecyclerViewAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A fragment representing a list of To_Do.
  */
+@AndroidEntryPoint
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding
         get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private var columnCount = 1
 
@@ -42,21 +42,10 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
+        //    initViewModel()
         setupRecyclerView()
         addButtonClick()
         authorizationListener()
-    }
-
-    private fun initViewModel() {
-        val mainViewModelFactory =
-            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
-
-        //getting activity's viewmodel
-        mainViewModel = ViewModelProvider(
-            requireActivity(),
-            mainViewModelFactory
-        )[MainViewModel::class.java]
     }
 
     private fun authorizationListener() {

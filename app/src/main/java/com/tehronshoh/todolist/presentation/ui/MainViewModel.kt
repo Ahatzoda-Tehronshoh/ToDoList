@@ -8,10 +8,14 @@ import com.tehronshoh.todolist.data.model.ToDo
 import com.tehronshoh.todolist.data.model.User
 import com.tehronshoh.todolist.domain.repository.LoggedInUserRepository
 import com.tehronshoh.todolist.domain.repository.ToDoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val toDoRepository: ToDoRepository,
     private val loggedInUserRepository: LoggedInUserRepository
 ) : ViewModel() {

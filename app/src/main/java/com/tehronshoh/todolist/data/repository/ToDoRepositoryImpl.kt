@@ -8,8 +8,9 @@ import com.tehronshoh.todolist.data.db.ToDoHistoryDao
 import com.tehronshoh.todolist.data.model.ToDoHistory
 import com.tehronshoh.todolist.presentation.util.getDateString
 import java.util.Calendar
+import javax.inject.Inject
 
-class ToDoRepositoryImpl(
+class ToDoRepositoryImpl @Inject constructor(
     private val toDoDao: ToDoDao,
     private val toDoHistoryDao: ToDoHistoryDao
 ) : ToDoRepository {

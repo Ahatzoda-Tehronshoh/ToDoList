@@ -8,10 +8,13 @@ import com.tehronshoh.todolist.data.model.ToDoHistory
 import com.tehronshoh.todolist.domain.repository.ToDoCommentsRepository
 import com.tehronshoh.todolist.domain.repository.ToDoHistoryRepository
 import com.tehronshoh.todolist.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EditViewModel(
+@HiltViewModel
+class EditViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val toDoHistoryRepository: ToDoHistoryRepository,
     private val toDoCommentsRepository: ToDoCommentsRepository

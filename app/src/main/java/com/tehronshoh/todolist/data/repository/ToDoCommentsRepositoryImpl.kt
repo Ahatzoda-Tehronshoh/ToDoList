@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import com.tehronshoh.todolist.data.db.ToDoCommentsDao
 import com.tehronshoh.todolist.data.model.ToDoComments
 import com.tehronshoh.todolist.domain.repository.ToDoCommentsRepository
+import javax.inject.Inject
 
-class ToDoCommentsRepositoryImpl(
+class ToDoCommentsRepositoryImpl @Inject constructor(
     private val toDoCommentsDao: ToDoCommentsDao
 ): ToDoCommentsRepository {
     override fun getCommentsToDoById(id: Long): LiveData<List<ToDoComments>> = toDoCommentsDao.getCommentsToDoById(id)
