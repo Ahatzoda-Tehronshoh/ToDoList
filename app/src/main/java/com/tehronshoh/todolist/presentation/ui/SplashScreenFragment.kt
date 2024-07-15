@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.databinding.SplashScreenFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SplashScreenFragment : Fragment() {
@@ -37,15 +39,17 @@ class SplashScreenFragment : Fragment() {
     }
 
     private fun loading() {
-        lifecycleScope.launch {
-            delay(1500)
-            mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
-                if (it != null)
-                    findNavController().navigate(R.id.action_splashScreenFragment_to_mainFragment)
-                else
-                    findNavController().navigate(R.id.action_splashScreenFragment_to_signUpFragment)
+        mainViewModel.loggedInUser.observe(viewLifecycleOwner) {
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(1500)
+                withContext(Dispatchers.Main) {
+                    if (it != null)
+                        findNavController().navigate(R.id.action_splashScreenFragment_to_mainFragment)
+                    else
+                        findNavController().navigate(R.id.action_splashScreenFragment_to_signUpFragment)
 
-                mainViewModel.loggedInUser.removeObservers(viewLifecycleOwner)
+                    mainViewModel.loggedInUser.removeObservers(viewLifecycleOwner)
+                }
             }
         }
     }

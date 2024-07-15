@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +20,10 @@ import com.tehronshoh.todolist.databinding.FragmentMainBinding
 import com.tehronshoh.todolist.presentation.ui.MainViewModel
 import com.tehronshoh.todolist.presentation.ui.home.adapter.ToDoRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * A fragment representing a list of To_Do.
@@ -42,7 +49,6 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //    initViewModel()
         setupRecyclerView()
         addButtonClick()
         authorizationListener()
@@ -90,14 +96,20 @@ class MainFragment : Fragment() {
             }
         }
 
-        mainViewModel.toDos.observe(viewLifecycleOwner) { toDoList ->
-            if (toDoList.isEmpty()) {
-                binding.noDataImage.visibility = View.VISIBLE
-                binding.noDataText.visibility = View.VISIBLE
-            } else {
-                binding.noDataImage.visibility = View.GONE
-                binding.noDataText.visibility = View.GONE
-                toDoAdapter.submitList(toDoList)
+        lifecycleScope.launch(Dispatchers.IO) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.toDos.collectLatest { toDoList ->
+                    withContext(Dispatchers.Main) {
+                        if (toDoList.isEmpty()) {
+                            binding.noDataImage.visibility = View.VISIBLE
+                            binding.noDataText.visibility = View.VISIBLE
+                        } else {
+                            binding.noDataImage.visibility = View.GONE
+                            binding.noDataText.visibility = View.GONE
+                            toDoAdapter.submitList(toDoList)
+                        }
+                    }
+                }
             }
         }
     }

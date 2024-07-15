@@ -9,8 +9,9 @@ import com.tehronshoh.todolist.data.model.User
 import com.tehronshoh.todolist.domain.repository.LoggedInUserRepository
 import com.tehronshoh.todolist.domain.repository.ToDoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,22 +24,27 @@ class MainViewModel @Inject constructor(
     val loggedInUser: LiveData<User>
         get() = _loggedInUser!!
 
-    private var _toDos: LiveData<List<ToDo>>? = null
-    val toDos: LiveData<List<ToDo>>
-        get() = _toDos!!
+    private var _toDos: MutableStateFlow<List<ToDo>> = MutableStateFlow(emptyList())
+    val toDos: StateFlow<List<ToDo>>
+        get() = _toDos
 
     init {
         initValues()
     }
 
     private fun initValues() {
-        _toDos = toDoRepository.getAllToDos()
+        viewModelScope.launch {
+            toDoRepository.getAllToDos().collect {
+                _toDos.emit(it)
+            }
+        }
+
         _loggedInUser = loggedInUserRepository.getLoggedInUser()
     }
 
     fun logOut() {
         viewModelScope.launch(Dispatchers.IO) {
-            if(loggedInUser.value != null)
+            if (loggedInUser.value != null)
                 loggedInUserRepository.userLoggedOut(LoggedInUser(loggedInUser.value!!.id))
         }
     }
