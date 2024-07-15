@@ -7,9 +7,11 @@ import com.tehronshoh.todolist.data.db.ToDoDao
 import com.tehronshoh.todolist.data.db.ToDoHistoryDao
 import com.tehronshoh.todolist.data.model.ToDoHistory
 import com.tehronshoh.todolist.presentation.util.getDateString
+import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
+import javax.inject.Inject
 
-class ToDoRepositoryImpl(
+class ToDoRepositoryImpl @Inject constructor(
     private val toDoDao: ToDoDao,
     private val toDoHistoryDao: ToDoHistoryDao
 ) : ToDoRepository {
@@ -30,5 +32,5 @@ class ToDoRepositoryImpl(
 
     override suspend fun deleteToDo(toDo: ToDo) = toDoDao.delete(toDo)
 
-    override fun getAllToDos(): LiveData<List<ToDo>> = toDoDao.getAll()
+    override fun getAllToDos(): Flow<List<ToDo>> = toDoDao.getAll()
 }

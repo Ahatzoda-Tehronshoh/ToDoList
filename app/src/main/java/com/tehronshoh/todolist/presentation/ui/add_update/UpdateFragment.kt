@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,28 +18,27 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
 import com.tehronshoh.todolist.data.model.ToDo
-import com.tehronshoh.todolist.data.datasource.LocalDataSource
 import com.tehronshoh.todolist.data.model.ToDoComments
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.CommentsBottomSheetDialogBinding
 import com.tehronshoh.todolist.databinding.FragmentUpdateBinding
 import com.tehronshoh.todolist.databinding.HistoryBottomSheetDialogBinding
+import com.tehronshoh.todolist.presentation.ui.MainViewModel
 import com.tehronshoh.todolist.presentation.ui.add_update.adapter.ToDoCommentsRecyclerViewAdapter
 import com.tehronshoh.todolist.presentation.ui.add_update.adapter.ToDoHistoryRecyclerViewAdapter
 import com.tehronshoh.todolist.presentation.util.FCMSender
 import com.tehronshoh.todolist.presentation.util.getDateString
-import com.tehronshoh.todolist.presentation.util.factory.EditViewModelFactory
-import com.tehronshoh.todolist.presentation.util.factory.MainViewModelFactory
-import com.tehronshoh.todolist.presentation.ui.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class UpdateFragment : Fragment() {
     private var _binding: FragmentUpdateBinding? = null
     private val binding
         get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var editViewModel: EditViewModel
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val editViewModel: EditViewModel by viewModels()
 
     private val args: UpdateFragmentArgs by navArgs()
 
@@ -51,7 +51,7 @@ class UpdateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
+        // initViewModel()
 
         authorizationListener()
         setupDatePicker()
@@ -289,24 +289,6 @@ class UpdateFragment : Fragment() {
             // Apply the adapter to the spinner.
             binding.statusSpinner.adapter = adapter
         }
-    }
-
-    private fun initViewModel() {
-        val mainViewModelFactory =
-            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
-
-        //getting activity's viewmodel
-        mainViewModel = ViewModelProvider(
-            requireActivity(), mainViewModelFactory
-        )[MainViewModel::class.java]
-
-        val editViewModelFactory =
-            EditViewModelFactory(LocalDataSource.getInstance(requireContext()))
-
-        //getting activity's viewmodel
-        editViewModel = ViewModelProvider(
-            requireActivity(), editViewModelFactory
-        )[EditViewModel::class.java]
     }
 
     override fun onDestroyView() {

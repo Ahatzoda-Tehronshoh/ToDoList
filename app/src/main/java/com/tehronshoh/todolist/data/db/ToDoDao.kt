@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.tehronshoh.todolist.data.model.ToDo
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ToDoDao {
@@ -20,5 +21,5 @@ abstract class ToDoDao {
     abstract suspend fun delete(toDo: ToDo)
 
     @Query("SELECT * FROM todo")
-    abstract fun getAll(): LiveData<List<ToDo>>
+    abstract fun getAll(): Flow<List<ToDo>>
 }

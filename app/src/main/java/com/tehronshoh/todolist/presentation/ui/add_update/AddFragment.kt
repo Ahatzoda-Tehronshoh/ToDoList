@@ -2,35 +2,35 @@ package com.tehronshoh.todolist.presentation.ui.add_update
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.messaging.FirebaseMessaging
 import com.tehronshoh.todolist.R
-import com.tehronshoh.todolist.presentation.ui.MainViewModel
 import com.tehronshoh.todolist.data.model.ToDo
-import com.tehronshoh.todolist.data.datasource.LocalDataSource
 import com.tehronshoh.todolist.data.model.ToDoStatus
 import com.tehronshoh.todolist.databinding.FragmentAddBinding
-import com.tehronshoh.todolist.presentation.util.factory.EditViewModelFactory
-import com.tehronshoh.todolist.presentation.util.factory.MainViewModelFactory
+import com.tehronshoh.todolist.presentation.ui.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
     private val binding
         get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var editViewModel: EditViewModel
+    private val mainViewModel: MainViewModel by activityViewModels()
+
+    private val editViewModel: EditViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,7 +38,7 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
+        //initViewModel()
 
         authorizationListener()
         setupDatePicker()
@@ -64,16 +64,14 @@ class AddFragment : Fragment() {
         binding.dueDate.setText("$day-${month + 1}-$year")
         binding.dueDate.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { _, selectedYear, selectedMonth, selectedDay ->
+                requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
                     year = selectedYear
                     month = selectedMonth
                     day = selectedDay
 
                     val selectedDate = "$selectedDay-${selectedMonth + 1}-$selectedYear"
                     binding.dueDate.setText(selectedDate)
-                },
-                year, month, day
+                }, year, month, day
             )
             datePickerDialog.datePicker.minDate = calendar.timeInMillis // Только будущие даты
             datePickerDialog.show()
@@ -127,8 +125,7 @@ class AddFragment : Fragment() {
 
                 FirebaseMessaging.getInstance().subscribeToTopic(toDo.id.toString())
                 findNavController().popBackStack()
-            } else
-                binding.titleInputLayout.error = "Title is required"
+            } else binding.titleInputLayout.error = "Title is required"
         }
     }
 
@@ -140,26 +137,6 @@ class AddFragment : Fragment() {
             getString(R.string.closed) -> ToDoStatus.CLOSED.toString()
             else -> "WAITING"
         }
-    }
-
-    private fun initViewModel() {
-        val mainViewModelFactory =
-            MainViewModelFactory(LocalDataSource.getInstance(requireContext()))
-
-        //getting activity's viewmodel
-        mainViewModel = ViewModelProvider(
-            requireActivity(),
-            mainViewModelFactory
-        )[MainViewModel::class.java]
-
-        val editViewModelFactory =
-            EditViewModelFactory(LocalDataSource.getInstance(requireContext()))
-
-        //getting activity's viewmodel
-        editViewModel = ViewModelProvider(
-            requireActivity(),
-            editViewModelFactory
-        )[EditViewModel::class.java]
     }
 
     override fun onDestroyView() {

@@ -5,8 +5,9 @@ import com.tehronshoh.todolist.data.db.LoggedInUserDao
 import com.tehronshoh.todolist.data.model.LoggedInUser
 import com.tehronshoh.todolist.data.model.User
 import com.tehronshoh.todolist.domain.repository.LoggedInUserRepository
+import javax.inject.Inject
 
-class LoggedInUserRepositoryImpl(private val loggedInUserDao: LoggedInUserDao):
+class LoggedInUserRepositoryImpl @Inject constructor(private val loggedInUserDao: LoggedInUserDao) :
     LoggedInUserRepository {
     override fun getLoggedInUser(): LiveData<User> = loggedInUserDao.getLoggedInUser()
 
